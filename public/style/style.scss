@@ -1,0 +1,90 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: cursive;
+}
+header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  div.logo {
+    display: flex;
+    align-items: center;
+    flex: 5 1 400px;
+    margin-left: 2rem;
+    img {
+      width: 6.5vw;
+      height: 6vw;
+    }
+  }
+  nav {
+    flex: 1 1 400px;
+    ul {
+      display: flex;
+      list-style-type: none;
+      justify-content: space-around;
+      margin-bottom: 0;
+    }
+  }
+
+  div.modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+main {
+  section.backimg {
+    width: 100%;
+    height: 80vh;
+    background-image: url("/picture/currency.jpg");
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+    z-index: 0;
+
+    div.filter {
+      background-color: rgba(206, 200, 187, 0.555);
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 80vh;
+    }
+
+    div.currency_choose {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        margin: 1rem 0rem;
+      }
+    }
+
+    div.value_showing {
+      display: flex;
+      div.buy,
+      div.sell {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0rem 1.5rem;
+        h2 {
+          font-size: 5rem;
+        }
+      }
+    }
+
+    div.chart {
+      background-color: rgb(209, 209, 203);
+      width: 35%;
+      height: 45%;
+    }
+  }
+}

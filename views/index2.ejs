@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark's WEB Final</title>
+    <!-- 匯入bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 匯入chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 匯入JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="/picture/icon-removebg-preview.png" alt="Logo" />
+        <h1>Mark's Currency Exchange</h1>
+      </div>
+
+      <nav>
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/homepage"
+              >首頁</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/currency_exchange">匯率轉換器</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 註冊帳號 -->
+      <!-- Button trigger modal -->
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="enroll"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">註冊帳號</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="/enroll" id="enroll_form" method="post">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    name="username"
+                    required
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    name="password"
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary" form="enroll_form">
+                Enroll
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 會員登入畫面 -->
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="login"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">會員登入</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form action="/login" id="login_form" method="post">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    name="username"
+                    required
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    name="password"
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary" form="login_form">
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="backimg">
+        <div class="filter"></div>
+        <div class="currency_choose">
+          <div class="selectitem">
+            <form action="/currencyhandling" method="GET" id="currency_form">
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                name="currency"
+                onchange="change_currency()"
+              >
+                <option value="">SELECT CURRENCY</option>
+                <option value="0">美金(USD)</option>
+                <option value="1">港幣(HKD)</option>
+                <option value="2">英鎊(GBP)</option>
+                <option value="3">澳幣(AUD)</option>
+                <option value="4">加拿大幣(CAD)</option>
+                <option value="5">新加坡幣(SGD)</option>
+                <option value="6">瑞士法郎(CHF)</option>
+                <option value="7">日圓(JPY)</option>
+                <option value="8">南非幣(ZAR)</option>
+                <option value="9">瑞典幣(SEK)</option>
+                <option value="10">紐元(NZD)</option>
+                <option value="11">泰幣(THB)</option>
+                <option value="12">菲國比索(PHP)</option>
+                <option value="13">印尼幣(IDR)</option>
+                <option value="14">歐元(EUR)</option>
+                <option value="15">韓元(KRW)</option>
+                <option value="16">越南盾(VND)</option>
+                <option value="17">馬來幣(MYR)</option>
+                <option value="18">人民幣(CNY)</option>
+              </select>
+              <!-- <button type="submit" class="btn btn-dark" id="btn_submit">
+                查詢
+              </button> -->
+
+              <!-- 偷偷記錄表單傳過去的值 -->
+              <div style="display: none">
+                <p id="number"><%= selected_number.number %></p>
+              </div>
+            </form>
+
+            <script>
+              let a = $("#number").text();
+              console.log(a);
+              $(`select option[value=${a}]`).attr("selected", "selected");
+            </script>
+
+            <script>
+              function change_currency() {
+                $("#currency_form").submit();
+              }
+            </script>
+          </div>
+
+          <div class="cash_or_deposit">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              id="cash_rate"
+            >
+              現金匯率
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              id="deposit_rate"
+            >
+              即期匯率
+            </button>
+          </div>
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingOne">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne"
+                >
+                  Data Souce
+                </button>
+              </h2>
+              <div
+                id="flush-collapseOne"
+                class="accordion-collapse collapse"
+                aria-labelledby="flush-headingOne"
+                data-bs-parent="#accordionFlushExample"
+              >
+                <div class="accordion-body">
+                  <a href="https://rate.bot.com.tw/xrt?Lang=zh-TW"
+                    >Click Link</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="value_showing">
+          <div class="buy">
+            <h1>銀行買入價</h1>
+            <!-- 現今匯率 -->
+            <div class="cash_value" style="display: initial">
+              <h2><%= targetvalue.cash_buy%></h2>
+            </div>
+            <!-- 即期匯率 -->
+            <div class="deposit_value" style="display: none">
+              <h2><%= targetvalue.deposit_buy%></h2>
+            </div>
+            <!-- 目前現金匯率-昨日 -->
+            <div class="cash_subtract" style="display: initial">
+              <h3><%= subtract_result.cash_buy %></h3>
+            </div>
+            <!-- 目前即期匯率-昨日 -->
+            <div class="deposit_subtract" style="display: none">
+              <h3><%= subtract_result.deposit_buy %></h3>
+            </div>
+          </div>
+          <div class="sell">
+            <h1>銀行賣出價</h1>
+            <!-- 現今匯率 -->
+            <div class="cash_value" style="display: initial">
+              <h2><%= targetvalue.cash_sell %></h2>
+            </div>
+            <!-- 即期匯率 -->
+            <div class="deposit_value" style="display: none">
+              <h2><%= targetvalue.deposit_sell %></h2>
+            </div>
+            <!-- 目前現金匯率-昨日 -->
+            <div class="cash_subtract" style="display: initial">
+              <h3><%= subtract_result.cash_sell %></h3>
+            </div>
+            <!-- 目前即期匯率-昨日 -->
+            <div class="deposit_subtract" style="display: none">
+              <h3><%= subtract_result.deposit_sell %></h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- 圖表的資料存放處 -->
+        <div id="chart_time" style="display: none">
+          <% time_data.forEach(e => {%>
+          <div>
+            <p><%= e.month %></p>
+            <p><%= e.date %></p>
+          </div>
+
+          <% }); %>
+        </div>
+
+        <div id="history_data" style="display: none">
+          <% history_data.forEach(e => {%>
+          <div>
+            <p><%= e.cash_buy %></p>
+            <p><%= e.cash_sell %></p>
+            <p><%= e.deposit_buy %></p>
+            <p><%= e.deposit_sell %></p>
+          </div>
+
+          <% }); %>
+        </div>
+
+        <!-- 用來呈現在圖中y的最大值與最小值 -->
+        <p id="max_min" style="display: none">
+          <%= history_data[0].cash_buy %>
+        </p>
+
+        <div class="chart" id="chart_cash">
+          <canvas id="myChart" style="max-width: 700px"></canvas>
+          <script>
+            const time = [];
+            const keys = ["month", "date"];
+
+            //時間日期
+            $("#chart_time div").each((parentidx, parentelem) => {
+              let time_temp = {};
+              $(parentelem.children).each((childidx, childelem) => {
+                time_temp[keys[childidx]] = childelem.innerHTML;
+              });
+              time.push(time_temp);
+            });
+            console.log(time);
+
+            //最大值與最小值
+            let max = parseFloat($("#max_min").text());
+            let min = parseFloat($("#max_min").text());
+
+            //歷史匯率數據
+            const history_data = [];
+            const data_keys = [
+              "cash_buy",
+              "cash_sell",
+              "deposit_buy",
+              "deposit_sell",
+            ];
+
+            $("#history_data div").each((parentidx, parentelem) => {
+              let history_data_temp = {};
+              $(parentelem.children).each((childidx, childelem) => {
+                history_data_temp[data_keys[childidx]] = childelem.innerHTML;
+
+                if (childelem.innerHTML > max) {
+                  max = childelem.innerHTML;
+                }
+
+                if (childelem.innerHTML < min) {
+                  min = childelem.innerHTML;
+                }
+              });
+              history_data.push(history_data_temp);
+            });
+            console.log(history_data);
+
+            //取整數上限下限
+            min = Math.floor(min);
+            max = Math.ceil(max);
+
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var myChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: [
+                  `${time[4].month}/${time[4].date}`,
+                  `${time[3].month}/${time[3].date}`,
+                  `${time[2].month}/${time[2].date}`,
+                  `${time[1].month}/${time[1].date}`,
+                  `${time[0].month}/${time[0].date}`,
+                ],
+                datasets: [
+                  {
+                    label: "銀行買入價",
+                    data: [
+                      `${history_data[4].cash_buy}`,
+                      `${history_data[3].cash_buy}`,
+                      `${history_data[2].cash_buy}`,
+                      `${history_data[1].cash_buy}`,
+                      `${history_data[0].cash_buy}`,
+                    ],
+                    backgroundColor: [],
+                    borderColor: "red",
+                    borderWidth: 1,
+                  },
+                  {
+                    label: "銀行賣出價",
+                    data: [
+                      `${history_data[4].cash_sell}`,
+                      `${history_data[3].cash_sell}`,
+                      `${history_data[2].cash_sell}`,
+                      `${history_data[1].cash_sell}`,
+                      `${history_data[0].cash_sell}`,
+                    ],
+                    backgroundColor: [],
+                    borderColor: "green",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    min: `${min}`,
+                    max: `${max}`,
+                  },
+                },
+              },
+            });
+          </script>
+        </div>
+
+        <div class="chart" id="chart_deposit" style="display: none">
+          <canvas id="myChart_2" style="max-width: 700px"></canvas>
+          <script>
+            var ctx = document.getElementById("myChart_2").getContext("2d");
+            var myChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: [
+                  `${time[4].month}/${time[4].date}`,
+                  `${time[3].month}/${time[3].date}`,
+                  `${time[2].month}/${time[2].date}`,
+                  `${time[1].month}/${time[1].date}`,
+                  `${time[0].month}/${time[0].date}`,
+                ],
+                datasets: [
+                  {
+                    label: "銀行買入價",
+                    data: [
+                      `${history_data[4].deposit_buy}`,
+                      `${history_data[3].deposit_buy}`,
+                      `${history_data[2].deposit_buy}`,
+                      `${history_data[1].deposit_buy}`,
+                      `${history_data[0].deposit_buy}`,
+                    ],
+                    backgroundColor: [],
+                    borderColor: "red",
+                    borderWidth: 1,
+                  },
+                  {
+                    label: "銀行賣出價",
+                    data: [
+                      `${history_data[4].deposit_sell}`,
+                      `${history_data[3].deposit_sell}`,
+                      `${history_data[2].deposit_sell}`,
+                      `${history_data[1].deposit_sell}`,
+                      `${history_data[0].deposit_sell}`,
+                    ],
+                    backgroundColor: [],
+                    borderColor: "green",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    min: `${min}`,
+                    max: `${max}`,
+                  },
+                },
+              },
+            });
+          </script>
+        </div>
+
+        <script>
+          $("#cash_rate").on("click", (e) => {
+            $("#chart_cash").show();
+            $("#chart_deposit").hide();
+          });
+
+          $("#deposit_rate").on("click", (e) => {
+            $("#chart_deposit").show();
+            $("#chart_cash").hide();
+          });
+        </script>
+      </section>
+    </main>
+
+    <script src="JS/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark's WEB Final</title>
+    <!-- 匯入bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <!-- 匯入chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 匯入JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style/style2.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="/picture/icon-removebg-preview.png" alt="Logo" />
+        <h1>Mark's Currency Exchange</h1>
+      </div>
+      <nav>
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="/homepage"
+              >首頁</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/currency_exchange">匯率轉換器</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="backimg">
+        <div class="filter"></div>
+        <div class="setting">
+          <form action="/exchange_execute" method="GET">
+            <div>
+              <div class="currency">
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="currency"
+                >
+                  <option value="">SELECT CURRENCY</option>
+                  <option value="0">美金(USD)</option>
+                  <option value="1">港幣(HKD)</option>
+                  <option value="2">英鎊(GBP)</option>
+                  <option value="3">澳幣(AUD)</option>
+                  <option value="4">加拿大幣(CAD)</option>
+                  <option value="5">新加坡幣(SGD)</option>
+                  <option value="6">瑞士法郎(CHF)</option>
+                  <option value="7">日圓(JPY)</option>
+                  <option value="8">南非幣(ZAR)</option>
+                  <option value="9">瑞典幣(SEK)</option>
+                  <option value="10">紐元(NZD)</option>
+                  <option value="11">泰幣(THB)</option>
+                  <option value="12">菲國比索(PHP)</option>
+                  <option value="13">印尼幣(IDR)</option>
+                  <option value="14">歐元(EUR)</option>
+                  <option value="15">韓元(KRW)</option>
+                  <option value="16">越南盾(VND)</option>
+                  <option value="17">馬來幣(MYR)</option>
+                  <option value="18">人民幣(CNY)</option>
+                </select>
+              </div>
+
+              <div class="type">
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="type"
+                >
+                  <option value="cash_buy">現金-銀行買入價</option>
+                  <option value="cash_sell">現金-銀行賣出價</option>
+                  <option value="deposit_buy">即期-銀行買入價</option>
+                  <option value="deposit_sell">即期-銀行賣出價</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <div class="input_value">
+                <input
+                  type="number"
+                  id="input"
+                  style="text-align: center"
+                  name="money"
+                  value="1"
+                />
+              </div>
+              <button type="submit" style="padding: 0.1rem 0.5rem">查詢</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="return_value" style="display: none;">
+          <p id="currency"><%= currency %> </p>
+          <p id="type"><%= type %> </p>
+          <p id="money"><%= money %> </p>
+        </div>
+        
+        <!-- 將傳回的值變預設值 -->
+        <script>
+          let currency = $("#currency").text();
+          $(`.currency select option[value=${currency}]`).attr("selected" , "selected");
+          let type = $("#type").text();
+          $(`.type select option[value=${type}]`).attr("selected" , "selected");
+          let money = parseInt($("#money").text());  //注意要用number 因為Input type 是 number
+          $(`.input_value input[name="money"]`).val(money);
+          
+        </script>
+
+
+
+        <div class="value_showing">
+          <div class="first_column">
+            <div class="USD">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">美金(USD)</span></br><%= exchange_value[0].cash_buy %> </h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">美金(USD)</span></br><%= exchange_value[0].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">美金(USD)</span></br><%= exchange_value[0].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">美金(USD)</span></br><%= exchange_value[0].deposit_sell %></h5>
+            </div>
+            
+            <div class="HKD">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">港幣(HKD)</span></br><%= exchange_value[1].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">港幣(HKD)</span></br><%= exchange_value[1].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">港幣(HKD)</span></br><%= exchange_value[1].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">港幣(HKD)</span></br><%= exchange_value[1].deposit_sell %></h5>
+            </div>
+            <div class="GBP">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">英鎊(GBP)</span></br><%= exchange_value[2].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">英鎊(GBP)</span></br><%= exchange_value[2].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">英鎊(GBP)</span></br><%= exchange_value[2].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">英鎊(GBP)</span></br><%= exchange_value[2].deposit_sell %></h5>
+            </div>
+            <div class="AUD">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">澳幣(AUD)</span></br><%= exchange_value[3].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">澳幣(AUD)</span></br><%= exchange_value[3].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">澳幣(AUD)</span></br><%= exchange_value[3].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">澳幣(AUD)</span></br><%= exchange_value[3].deposit_sell %></h5>
+            </div>
+            
+            <div class="CAD">
+              <h5 class="exchange_cash_buy" style="display: initial;">
+                <span class="badge bg-secondary">加拿大幣(CAD)</span></br><%= exchange_value[4].cash_buy %>
+              </h5>
+              <h5 class="exchange_cash_sell" style="display: none;">
+                <span class="badge bg-secondary">加拿大幣(CAD)</span></br><%= exchange_value[4].cash_sell %>
+              </h5>
+              <h5 class="exchange_deposit_buy" style="display: none;">
+                <span class="badge bg-secondary">加拿大幣(CAD)</span></br><%= exchange_value[4].deposit_buy %>
+              </h5>
+              <h5 class="exchange_deposit_sell" style="display: none;">
+                <span class="badge bg-secondary">加拿大幣(CAD)</span></br><%= exchange_value[4].deposit_sell %>
+              </h5>
+            </div>
+
+          </div>
+          <div class="second_column">
+            <div class="SGD">
+              <h5 class="exchange_cash_buy" style="display: initial;">
+                <span class="badge bg-secondary">新加坡幣(SGD)</span></br><%= exchange_value[5].cash_buy %>
+              </h5>
+              <h5 class="exchange_cash_sell" style="display: none;">
+                <span class="badge bg-secondary">新加坡幣(SGD)</span></br><%= exchange_value[5].cash_sell %>
+              </h5>
+              <h5 class="exchange_deposit_buy" style="display: none;">
+                <span class="badge bg-secondary">新加坡幣(SGD)</span></br><%= exchange_value[5].deposit_buy %>
+              </h5>
+              <h5 class="exchange_deposit_sell" style="display: none;">
+                <span class="badge bg-secondary">新加坡幣(SGD)</span></br><%= exchange_value[5].deposit_sell %>
+              </h5>
+            </div>
+
+            <div class="CHF">
+              <h5 class="exchange_cash_buy" style="display: initial;">
+                <span class="badge bg-secondary">瑞士法郎(CHF)</span></br><%= exchange_value[6].cash_buy %>
+              </h5>
+              <h5 class="exchange_cash_sell" style="display: none;">
+                <span class="badge bg-secondary">瑞士法郎(CHF)</span></br><%= exchange_value[6].cash_sell %>
+              </h5>
+              <h5 class="exchange_deposit_buy" style="display: none;">
+                <span class="badge bg-secondary">瑞士法郎(CHF)</span></br><%= exchange_value[6].deposit_buy %>
+              </h5>
+              <h5 class="exchange_deposit_sell" style="display: none;">
+                <span class="badge bg-secondary">瑞士法郎(CHF)</span></br><%= exchange_value[6].deposit_sell %>
+              </h5>
+            </div>
+
+            <div class="JPY">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">日圓(JPY)</span></br><%= exchange_value[7].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">日圓(JPY)</span></br><%= exchange_value[7].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">日圓(JPY)</span></br><%= exchange_value[7].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">日圓(JPY)</span></br><%= exchange_value[7].deposit_sell %></h5>
+            </div>
+            <div class="ZAR">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">南非幣(ZAR)</span></br><%= exchange_value[8].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">南非幣(ZAR)</span></br><%= exchange_value[8].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">南非幣(ZAR)</span></br><%= exchange_value[8].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">南非幣(ZAR)</span></br><%= exchange_value[8].deposit_sell %></h5>
+            </div>
+
+            <div class="SEK">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">瑞典幣(SEK)</span></br><%= exchange_value[9].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">瑞典幣(SEK)</span></br><%= exchange_value[9].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">瑞典幣(SEK)</span></br><%= exchange_value[9].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">瑞典幣(SEK)</span></br><%= exchange_value[9].deposit_sell %></h5>
+            </div>
+          </div>
+          <div class="third_column">
+            <div class="NZD">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">紐元(NZD)</span></br><%= exchange_value[10].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">紐元(NZD)</span></br><%= exchange_value[10].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">紐元(NZD)</span></br><%= exchange_value[10].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">紐元(NZD)</span></br><%= exchange_value[10].deposit_sell %></h5>
+            </div>
+
+            <div class="THB">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">泰幣(THB)</span></br><%= exchange_value[11].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">泰幣(THB)</span></br><%= exchange_value[11].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">泰幣(THB)</span></br><%= exchange_value[11].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">泰幣(THB)</span></br><%= exchange_value[11].deposit_sell %></h5>
+            </div>
+            <div class="PHP">
+              <h5 class="exchange_cash_buy" style="display: initial;">
+                <span class="badge bg-secondary">菲國比索(PHP)</span></br><%= exchange_value[12].cash_buy %>
+              </h5>
+              <h5 class="exchange_cash_sell" style="display: none;">
+                <span class="badge bg-secondary">菲國比索(PHP)</span></br><%= exchange_value[12].cash_sell %>
+              </h5>
+              <h5 class="exchange_deposit_buy" style="display: none;">
+                <span class="badge bg-secondary">菲國比索(PHP)</span></br><%= exchange_value[12].deposit_buy %>
+              </h5>
+              <h5 class="exchange_deposit_sell" style="display: none;">
+                <span class="badge bg-secondary">菲國比索(PHP)</span></br><%= exchange_value[12].deposit_sell %>
+              </h5>
+            </div>
+
+            <div class="IDR">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">印尼幣(IDR)</span></br><%= exchange_value[13].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">印尼幣(IDR)</span></br><%= exchange_value[13].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">印尼幣(IDR)</span></br><%= exchange_value[13].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">印尼幣(IDR)</span></br><%= exchange_value[13].deposit_sell %></h5>
+            </div>
+
+            <div class="EUR">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">歐元(EUR)</span></br><%= exchange_value[14].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">歐元(EUR)</span></br><%= exchange_value[14].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">歐元(EUR)</span></br><%= exchange_value[14].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">歐元(EUR)</span></br><%= exchange_value[14].deposit_sell %></h5>
+            </div>
+          </div>
+          <div class="forth_column">
+
+            <div class="KRW">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">韓元(KRW)</span></br><%= exchange_value[15].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">韓元(KRW)</span></br><%= exchange_value[15].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">韓元(KRW)</span></br><%= exchange_value[15].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">韓元(KRW)</span></br><%= exchange_value[15].deposit_sell %></h5>
+            </div>
+
+            <div class="VND">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">越南盾(VND)</span></br><%= exchange_value[16].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">越南盾(VND)</span></br><%= exchange_value[16].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">越南盾(VND)</span></br><%= exchange_value[16].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">越南盾(VND)</span></br><%= exchange_value[16].deposit_sell %></h5>
+            </div>
+
+            <div class="MYR">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">馬來幣(MYR)</span></br><%= exchange_value[17].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">馬來幣(MYR)</span></br><%= exchange_value[17].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">馬來幣(MYR)</span></br><%= exchange_value[17].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">馬來幣(MYR)</span></br><%= exchange_value[17].deposit_sell %></h5>
+            </div>
+
+            <div class="CNY">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">人民幣(CNY)</span></br><%= exchange_value[18].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">人民幣(CNY)</span></br><%= exchange_value[18].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">人民幣(CNY)</span></br><%= exchange_value[18].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">人民幣(CNY)</span></br><%= exchange_value[18].deposit_sell %></h5>
+            </div>
+
+            <div class="TWD">
+              <h5 class="exchange_cash_buy" style="display: initial;"><span class="badge bg-secondary">臺幣(TWD)</span></br><%= exchange_value[19].cash_buy %></h5>
+              <h5 class="exchange_cash_sell" style="display: none;"><span class="badge bg-secondary">臺幣(TWD)</span></br><%= exchange_value[19].cash_sell %></h5>
+              <h5 class="exchange_deposit_buy" style="display: none;"><span class="badge bg-secondary">臺幣(TWD)</span></br><%= exchange_value[19].deposit_buy %></h5>
+              <h5 class="exchange_deposit_sell" style="display: none;"><span class="badge bg-secondary">臺幣(TWD)</span></br><%= exchange_value[19].deposit_sell %></h5>
+            </div>
+
+          </div>
+        </div>
+
+        <script>
+          let newtype = $("#type").text();
+
+          //先將全部隱藏
+          $(".exchange_cash_buy").hide()
+          $(".exchange_cash_sell").hide()
+          $(".exchange_deposit_buy").hide()
+          $(".exchange_deposit_sell").hide()
+
+          //將NAN的值都變成..
+          $("h5").each((idx ,e) => {
+            if(isNaN(e.lastChild.nodeValue))
+            {
+              e.lastChild.nodeValue = "..";
+            };
+          })
+
+          //將選中的顯示
+          $(`.exchange_${newtype}`).show()
+
+
+        </script>
+      </section>
+    </main>
+
+    
+  </body>
+</html>
